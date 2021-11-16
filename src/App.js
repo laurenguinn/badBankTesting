@@ -1,24 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import NavBar from "./Components/navbar.js";
+import Home from "./Components/home.js";
+import AllData from "./Components/alldata.js";
+import CreateAccount from "./Components/createaccount";
+import LogIn from "./Components/login";
+import LogOut from "./Components/logout";
+import Deposit from "./Components/deposit";
+import Withdraw from "./Components/withdraw";
+import { UserContext } from "./Components/context.js";
+import { Route, HashRouter } from "react-router-dom";
+import { UserProvider } from "./Components/context";
+
 
 function App() {
+  const [username] = useState();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    
+    <UserProvider>
+      <HashRouter>
+        <NavBar {...{ username }} />
+        <UserContext.Provider value={{ users: [] }}>
+            <Route path="/" exact component={Home} />
+            <Route path="/CreateAccount/" component={CreateAccount} />
+            <Route path="/deposit/" component={Deposit} />
+            <Route path="/withdraw/" component={Withdraw} />
+            <Route path="/alldata/" component={AllData} />
+            <Route
+              path="/login/"
+              render={(routeProps) => (
+                <LogIn {...{ username, ...routeProps }} />
+              )}
+            />
+            <Route path="/logout/" component={LogOut} />
+        </UserContext.Provider>
+      </HashRouter>
+    </UserProvider>
+ 
+  
   );
 }
 
